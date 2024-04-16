@@ -165,6 +165,7 @@ set_shell() {
 					echo "$i) $o"
 					((i++)) || true
 				done
+				PRESET_USER_SHELL="bash"
 				if [ -z $PRESET_USER_SHELL ];then
 					read -r reply
 				else
@@ -254,6 +255,7 @@ set_timezone_and_locales() {
 	echo ""
 	unset response
 	while [[ ! "${response}" =~ ^(Y|y|N|n)$ ]]; do
+		SET_LANG_BASED_ON_LOCATION="y"
 		if [ -z $SET_LANG_BASED_ON_LOCATION ];then
 			read -r -p "Set user language based on your location? [Y/n] " response
 			response=${response:-Y}
@@ -275,6 +277,7 @@ set_timezone_and_locales() {
 
 	readarray -t options <<< "${LOCALES}"
 
+	PRESET_LOCALE="zh_CN.UTF-8"
 	if [ -z $PRESET_LOCALE ];then
 		# when having more locales, prompt for choosing one
 		if [[ "${#options[@]}" -gt 1 ]]; then
@@ -357,6 +360,7 @@ add_user() {
 	REPEATS=3
 	while [ -f "/root/.not_logged_in_yet" ]; do
 		echo -e "\nPlease provide a username (eg. your first name): \c"
+		PRESET_USER_NAME="leo"
 		if [ -z $PRESET_USER_NAME ];then
 			read -r -e username
 		else
@@ -373,6 +377,7 @@ add_user() {
 	done
 
 	while [ -f "/root/.not_logged_in_yet" ]; do
+		PRESET_USER_PASSWORD="admin123"
 		if [ -z $PRESET_USER_PASSWORD ];then
 			read_password "Create user ($username)"
 		else
@@ -397,6 +402,7 @@ add_user() {
 				fi
 			fi
 			echo -e ""
+			PRESET_DEFAULT_REALNAME="Leo"
 			if [ -z $PRESET_DEFAULT_REALNAME ];then
 				read -r -e -p "Please provide your real name: " -i "${RealUserName^}" RealName
 			else
@@ -489,6 +495,7 @@ if [[ -f /root/.not_logged_in_yet && -n $(tty) ]]; then
 	REPEATS=3
 	while [ -f "/root/.not_logged_in_yet" ]; do
 		. /root/.not_logged_in_yet
+		PRESET_ROOT_PASSWORD="1234567"
 		if [ -z $PRESET_ROOT_PASSWORD ];then
 			read_password "Create root"
 		else
